@@ -71,43 +71,21 @@ $.grabarRegistro = function(formulario,token){
         data: data,
         beforeSend:  function(){
             $('span.help-block').addClass('hidden');
-            $('div').removeClass('text-red');
         },
 
-    }).done(function(respuesta) {
+    }).done(function(res) {
 
-        //Recargo los datos en datatable para que muestre los cambios recientes
-        $('#tabla').DataTable().ajax.reload();
+
+        imprimirMensaje(res.tipo,res.message,res.tabla,res.divDestino);
+
+
+    }).fail(function(res){
+
         
-        //Desvanecemos la ventana modal
-        $('#myModal').modal('hide');
 
-        $('#mensaje').html(' ');
-
-        $('#divMensaje').removeClass('hidden').addClass('alert-success').fadeIn();
-
-        $('#tipo').html('Exito');
-
-        $('#iconoMensaje').removeClass().addClass('icon fa fa-check');
-
-        $("#mensaje").html(respuesta.message);
-
-
-    }).fail(function(respuesta){
-
-        $('#mensaje').html(' ');
-
-        $('#divMensaje').removeClass('hidden alert-success').addClass('alert-danger').fadeIn();
-
-        $('#tipo').html('Error');
-
-        $('#iconoMensaje').removeClass().addClass('icon fa fa-ban');
-
-        $("#mensaje").html('No se pudo procesar el formulario, por favor revise los errores indicados');
-
-        $.each(respuesta.responseJSON,function (ind, elem) { 
+        $.each(res.responseJSON,function (ind, elem) { 
         
-            $('div.'+ind).removeClass('hidden').addClass('text-red');
+            $('div.'+ind).removeClass('hidden');
             
             $('span.'+ind).removeClass('hidden');
 
@@ -115,8 +93,49 @@ $.grabarRegistro = function(formulario,token){
             $('span.'+ind).html('<strong>'+elem+'</strong>');
 
         });
+
+        imprimirMensaje('Error',res.message,false,'divMensajeModal');
             
     
     });
 
+}
+
+//Funcion imprimir mensajes
+var imprimirMensaje = function(tipo,mensaje,tabla=true,divDestino='divMensajeModal'){
+
+    var icono = '';
+    var alerta = '';
+
+   //Recargo los datos en datatable para que muestre los cambios recientes
+    if(tabla)
+        $('#tabla').DataTable().ajax.reload();
+        
+    
+    if(divDestino!='divMensajeModal')
+        //Desvanecemos la ventana modal
+        $('#myModal').modal('hide');
+
+    if(tipo=='Exito'){
+        
+        icono  = 'icon fa fa-check';
+        alerta = 'alert-success';
+    
+    }else{
+    
+        icono = 'icon fa fa-ban';
+        alerta = 'alert-danger';
+        mensaje = 'Error al procesar el formulario';
+    }
+
+  
+    $('#mensaje').html(' ');
+
+    $('#'+divDestino).removeClass('hidden').addClass(alerta).fadeIn();
+
+    $('#tipo').html(tipo);
+
+    $('#iconoMensaje').removeClass().addClass(icono);
+
+    $("#mensaje").html(mensaje);
 }

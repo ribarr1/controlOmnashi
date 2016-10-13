@@ -12,20 +12,20 @@
 
     {!! Form::text('name',null, ['class'=>"form-control",'placeholder'=>'Nombre','id'=>'name']) !!}
 
-    <span class="help-block name hidden"></span>
+    <span class="help-block name hidden text-red"></span>
   
   </div>
   
   <div class="form-group">
     <label for="exampleInputPassword1">Slug</label>
     {!! Form::text('slug',null, ['class'=>"form-control",'placeholder'=>'Slug','id'=>'slug']) !!}
-    <span class="help-block slug hidden"></span>
+    <span class="help-block slug hidden text-red"></span>
   </div>
   
   <div class="form-group">
     <label for="exampleInputFile">Descripci&oacute;n</label>
     {!! Form::text('description',null, ['class'=>"form-control",'placeholder'=>'Descripcion','id'=>'description']) !!}
-    <span class="help-block description hidden"></span>
+    <span class="help-block description hidden text-red"></span>
   </div>
   
 {!! Form::close() !!}

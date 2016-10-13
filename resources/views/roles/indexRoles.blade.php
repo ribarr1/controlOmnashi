@@ -49,6 +49,7 @@
             $('#btn-nuevo').click(function(){
                 
                 var ruta  = "{{ route("roles.create") }}";
+
                 
                 //lamado ajax metodo get para tomar el formulario
                 $.get(ruta,'',function(data) {
@@ -66,10 +67,11 @@
             //Funcion para crear o modificar color
             $('#divRenderFormulario').on('click','a.btn-guardar',function(){
                 
-                var token = $("input[name=_token]").val(); 
-                
-                $.grabarRegistro('frm', token)
-                
+                var token = $("input[name=_token]").val();
+                var modal = true; 
+               
+                $.grabarRegistro('frm', token);
+
             });
 
         });

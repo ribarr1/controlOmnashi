@@ -144,7 +144,9 @@ class RolesController extends Controller
             $result = [
                 'tipo'          =>'Exito',
                 'message'       =>'Registro creado correctamente',
-                'iconoMensaje'  =>'icon fa fa-check'
+                'iconoMensaje'  =>'icon fa fa-check',
+                'tabla'         =>'true',
+                'divDestino'    => 'divMensajeModal'                
                 ];
 
             return response()->json($result); 
@@ -236,9 +238,11 @@ class RolesController extends Controller
                 if(empty($role))
                 {
                     $result = [
-                        'tipo'          =>'Error',
-                        'message'       =>'No existe el registro indicado',
-                        'iconoMensaje'  =>'icon fa fa-bang'
+                        'tipo'          => 'Error',
+                        'message'       => 'No existe el registro indicado',
+                        'iconoMensaje'  => 'icon fa fa-ban',
+                        'tabla'         => 'false',
+                        'divDestino'    => 'divMensaje'
                     ];
 
                     return response()->json($result);
@@ -251,10 +255,12 @@ class RolesController extends Controller
                     $role->save(); 
 
                     $result = [
-                        'tipo'          =>'Exito',
-                        'message'       =>'Registro actualizado correctamente',
-                        'iconoMensaje'  =>'icon fa fa-check'
-                    ];
+                        'tipo'          => 'Exito',
+                        'message'       => 'Registro actualizado correctamente',
+                        'iconoMensaje'  => 'icon fa fa-check',
+                        'tabla'         => 'true',
+                        'divDestino'    => 'divMensaje'                
+                        ];
 
                     return response()->json($result);
 

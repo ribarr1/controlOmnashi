@@ -8,7 +8,8 @@
                 <h4 class="modal-title" id="myModalLabel">Editar Roles de Usuarios</h4>
             </div>
             <div class="modal-body">
-                
+            
+                @include('layouts.partials.messageModal')
                 @include('roles.partials.frmRoles')
 
             </div>
