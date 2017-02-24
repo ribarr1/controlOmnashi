@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 //Modelos
 use Bican\Roles\Models\Role;
+use App\User;
+use App\RolUser;
 //Fin modelos
 
 use App\Http\Requests;
@@ -15,7 +17,7 @@ use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-class RolesController extends Controller
+class UsersController extends Controller
 {
 
 
@@ -32,53 +34,49 @@ class RolesController extends Controller
     public function index()
     {
         //
-        $tituloPagina = 'Listado de Roles de Usuarios';
 
-        return view('roles.indexRoles',compact('tituloPagina'));
+        return view('users.indexUsers');
     }
 
     /**
-     * Muesta el listado general de roles
+     * Muesta el listado general de usuarios
      *
      * @return \Illuminate\Http\Response
      */
     public function listado(Request $request)
     {
         
-        $tabla = new Role();
+        $tabla = new User();
 
         if($request->ajax())
         {
             
-            $roles = $tabla->all();
+            $users = $tabla->all();
      
-            return Datatables::of($roles)
+            return Datatables::of($users)
             ->setRowId('id')
-            ->addColumn('id',function($role){
-                return $role->id;
+            ->addColumn('id',function($user){
+                return $user->id;
             })
-            ->addColumn('name',function($role){
-                return $role->name;
+            ->addColumn('email',function($user){
+                return $user->email;
             })
-            ->addColumn('slug',function($role){
-                return $role->slug;
+            ->addColumn('nombre',function($user){
+                return $user->name;
             })
-            ->addColumn('description',function($role){
-                return $role->description;
-            })
-            ->addColumn('action', function ($role) {
+            ->addColumn('action', function ($user) {
                 
-                $ruta = route('roles.edit',$role->id);
+                $ruta = route('users.edit',$user->id);
 
-                $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$role->id);
-                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete"   title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$role->id);
+                $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$user->id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete"   title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$user->id);
 
                 return $strHtml;
             })
             ->make(true);
         }
 
-        return view('roles.indexRoles');
+        return view('users.indexUsers');
 
     }
 
@@ -89,11 +87,14 @@ class RolesController extends Controller
      */
     public function create(Request $request)
     {
+        
         //
+        $roles = Role::orderBy('name','asc')->pluck('name','id');
+
         if($request->ajax())
         {
 
-            $view = view('roles.partials.rolesModal');
+            $view = view('users.partials.usersModal', compact('roles'));
             
             $sections = $view->renderSections();
                
@@ -101,7 +102,7 @@ class RolesController extends Controller
             
         } else {
 
-            return view('roles');
+            return view('users');
 
         }
     }
@@ -118,32 +119,30 @@ class RolesController extends Controller
         $this->validate($request,[
 
             'name'         =>  'required',
-            'slug'         =>  'required',
-            'description'  =>  'required',
-            
+            'email'         =>  'required',
+           
             ],
 
             [
-            'name.required'        => "El campo nombre es requerido",
-            'slug.required'        => "El campo slug es requerido",
-            'description.required' => "El campo descripcion es requerido",
-
+            'name.required'   => "El campo nombre es requerido",
             ]
 
             );
 
-        $role = new Role();
-
+        $users = new User();
+        //Qeude programando en este metodo
         if($request->ajax())
         {
 
             $data = $request->all();
 
-            $role->create($data);
+            $data['password'] = $this->crearPassword();
+
+            $users->create($data);
 
             $result = [
                 'tipo'          =>'Exito',
-                'message'       =>'Registro creado correctamente',
+                'message'       =>'Registro creado correctamente'.$data['password'],
                 'iconoMensaje'  =>'icon fa fa-check',
                 'tabla'         =>'true',
                 'divDestino'    => 'divMensajeModal'                
@@ -152,7 +151,7 @@ class RolesController extends Controller
             return response()->json($result); 
             
         } else {
-            return view('roles');
+            return view('users');
 
         }
     }
@@ -178,8 +177,10 @@ class RolesController extends Controller
     {
         //
 
-        $role = Role::find($id);
+        $role = User::find($id);
 
+        $objRolUser = new RolUser();
+        $rolUsuario = $objRolUser->buscarRolUser($id);
 
         if($request->ajax())
         {
@@ -189,7 +190,7 @@ class RolesController extends Controller
 
                 $accion = 'Editar';
                 
-                $view = view('roles.partials.rolesModal',compact('accion','role'));
+                $view = view('users.partials.usersModal',compact('accion','role','rolUsuario'));
             
                 $sections = $view->renderSections();
                
@@ -210,7 +211,7 @@ class RolesController extends Controller
             
         } else {
 
-            return view('roles');
+            return view('users');
 
         }
     }
@@ -219,8 +220,7 @@ class RolesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $idusers * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -238,11 +238,11 @@ class RolesController extends Controller
                 if(empty($role))
                 {
                     $result = [
-                        'tipo'          => 'Error',
-                        'message'       => 'No existe el registro indicado',
-                        'iconoMensaje'  => 'icon fa fa-ban',
-                        'tabla'         =>  false,
-                        'divDestino'    => 'divMensaje'
+                        'tipo'            => 'Error',
+                        'message'         => 'No existe el registro indicado',
+                        'iconoMensaje'    => 'icon fa fa-ban',
+                        'tabla'           =>  false,
+                        'divDestino'      => 'divMensaje'
                     ];
 
                     return response()->json($result);
@@ -268,7 +268,7 @@ class RolesController extends Controller
 
             } else {
 
-                return view('roles.index');
+                return view('users.index');
 
             }
 
@@ -278,7 +278,7 @@ class RolesController extends Controller
             Session::flash('message',$e->errorInfo[1].', no fue posible actualizar');
             Session::flash('error', 'alert-danger');
 
-            return redirect()->to('/roles/');
+            return redirect()->to('/users/');
             
 
         }
@@ -309,7 +309,7 @@ class RolesController extends Controller
 
                 return response()->json($result);
 
-            }catch (\Illuminate\Database\QueryException $e) {
+            } catch (\Illuminate\Database\QueryException $e) {
 
                 /*En caso de poder eliminar el registro, capturo la excepcion y envio un mensaje con el
                 * Codigo del error, y estatus 500 para que la aplicacion sepa que se trata de un error
@@ -327,6 +327,43 @@ class RolesController extends Controller
             }
 
         }
+    }
+
+    public function generarPassword()
+    {
+        $letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstvwxyz';
+
+        $signos = '$#&?!+*';
+
+        $password = '';
+
+        mt_srand((double)  microtime()*1000000);
+
+        for($i=0;$i<5;$i++)
+          $password .= $letras[mt_rand (0, strlen ($letras)-1)];
+
+        for($i=5;$i<7;$i++)
+          $password .= mt_rand(0, 9);
+
+        $password .= $signos[mt_rand(0, strlen($signos)-1)];
+
+        $password = str_shuffle($password);
+
+        return $password;
+    }
+
+    public function enviarPassword($email,$password)
+    {
+
+        $emailRadar = sfConfig::get('app_email_acta');
+        $asunto     = "Nuevo password para RadarSoft";
+
+        $mensaje = "Se ha generado un nuevo password de acceso para usted en RadarSoft, los datos son: \n\n";
+        $mensaje .= sprintf("\n Usuario: %s \n Clave de acceso: %s \n",$email,$password);
+        $mensaje .= "\n\n Saludos cordiales,";
+        $mensaje .= "\n\n RadarSoft";
+  
+
     }
 
 }

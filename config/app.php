@@ -124,6 +124,10 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+
+    /*logs de errores*/
+        'Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

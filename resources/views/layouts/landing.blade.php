@@ -6,12 +6,12 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="RadarSoft">
-    <meta name="author" content="Ruben Ibarra / Juancarlos Rojas - radarsoft.com">
+    <meta name="description" content="OmnashiSoft">
+    <meta name="author" content="Ruben Ibarra  omanshiyoga.com">
 
-    <meta property="og:title" content="Radar Software />
+    <meta property="og:title" content="Omnashi Software />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="RadarSoft" />
+    <meta property="og:description" content="OmnashiSoft" />
     <meta property="og:url" content="http://demoradar.radarsoft.com/" />
     <meta property="og:image" content="http://demo.adminlte.acacha.org/img/AcachaAdminLTE.png" />
     <meta property="og:image" content="http://demo.adminlte.acacha.org/img/AcachaAdminLTE600x600.png" />
@@ -19,7 +19,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
     <meta property="og:sitename" content="demo.radarsoft" />
     <meta property="og:url" content="http://demo.radarsoft.com" />
 
-    <title>Radar - Software de seguimiento </title>
+    <title>Omnashi - Software de control </title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('/css/font-awesome.min.css') }}">
@@ -50,7 +50,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><b>RadarSoft <i class="fa fa-crosshairs" aria-hidden="true"></i></b>  </a>
+            <a class="navbar-brand" href="#"><b>OmnashiSoft <i class="fa fa-crosshairs" aria-hidden="true"></i></b>  </a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -75,14 +75,13 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
     <div class="container">
         <div class="row centered">
             <div class="col-lg-12">
-                <h1>RadarSoft <i class="fa fa-crosshairs" aria-hidden="true"></i><b> <a href="https://github.com/acacha/adminlte-laravel">Gesti&oacuten de Incidencias QA</a></b></h1>
-                <h3><a href="https://laravel.com/">RadarSoft <i class="fa fa-crosshairs" aria-hidden="true"></i> </a>
-                    es un software que permite el seguimiento oportuno de los requerimientos QA, reportes, estad&iacute;sticas, gr&aacute;ficos
-                que permiten visualizar el desempe&ntilde;o del talento humano de tu empresa</h3>
+                <h1>OmnashiSoft <i class="fa fa-crosshairs" aria-hidden="true"></i><b> <a href="https://github.com/acacha/adminlte-laravel">Control Administrativo de Omnashi Yoga Studio</a></b></h1>
+                <h3><a href="https://laravel.com/">OmnashiSoft <i class="fa fa-crosshairs" aria-hidden="true"></i> </a>
+                    Es un software que facilita el control administrativo de un centro de yoga, control de inscritos, interesados, clases, profesores y asistencias</h3>
                 <h3><a href="{{ url('/register') }}" class="btn btn-lg btn-success">{{ trans('adminlte_lang::message.gedstarted') }}</a></h3>
             </div>
             <div class="col-lg-2">
-                <h5>Interfaz de Usuario Elegante</h5>
+                <h5>Interfaz de OmnashiSoft</h5>
                 <p>Que puede adaptarse a distintos dispositivos, Tablets, SmartPhone, PCs</p>
                 <img class="hidden-xs hidden-sm hidden-md" src="{{ asset('/img/arrow1.png') }}">
             </div>
@@ -93,7 +92,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
                 <br>
                 <img class="hidden-xs hidden-sm hidden-md" src="{{ asset('/img/arrow2.png') }}">
                 <h5>Informaci&oacute;n al alcance</h5>
-                <p>... <a href="http://acacha.org">RadarSoft <i class="fa fa-crosshairs" aria-hidden="true"></i></a>
+                <p>... <a href="http://acacha.org">OmnashiSoft <i class="fa fa-crosshairs" aria-hidden="true"></i></a>
                     cuenta con un dashboard personalizado para cada rol, para que pueda visualizar la informaci&oacute;n
                 r&aacute;pida y f&aacute;cilmente</p>
             </div>

@@ -1,7 +1,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        {{ $tituloPagina }}
+        @yield('titulo_pagina')
         <small>@yield('contentheader_description')</small>
     </h1>
     <ol class="breadcrumb">

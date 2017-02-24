@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('htmlheader_title')
-    Listado de Roles de Usuarios
+    Listado de Usuarios
 @endsection
 
 @section('scriptsjQuery')
@@ -16,21 +16,19 @@
                 "language": { "url": "/i18n/dataTable.spanish.lang"},
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/roles/listado",
+                "ajax": "/users/listado",
                 "columns": [
                     {data: 'id'},
+                    {data: 'email'},
                     {data: 'name'},
-                    {data: 'slug'},
-                    {data: 'description'},
                     {data: 'action'}
-
                 ],
             });
 
             //Funcion para llamar al formulario EDITAR
             $('#tabla').on('click','a.btn-edit',function(){
                 
-                var ruta  = "{{ route("roles.index") }}/"+ $(this).data('id')+"/edit";
+                var ruta  = "{{ route("users.index") }}/"+ $(this).data('id')+"/edit";
                 
 
                 //lamado ajax metodo get para tomar el formulario
@@ -48,7 +46,7 @@
             //Funcion para llamar al formulario NUEVO
             $('#btn-nuevo').click(function(){
                 
-                var ruta  = "{{ route("roles.create") }}";
+                var ruta  = "{{ route("users.create") }}";
 
                 
                 //lamado ajax metodo get para tomar el formulario
@@ -81,7 +79,7 @@
 
 @section('titulo_pagina')
 
-Roles de Usuarios
+Listado de usuarios
     
 @endsection
 
@@ -92,7 +90,7 @@ Roles de Usuarios
         <div class="col-xs-12">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3 class="box-title">Listado de Roles</h3>
+                    <h3 class="box-title">Listado de Usuarios</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-sm btn-primary btn-flat" id="btn-nuevo">Nuevo</button>
                     </div>
@@ -110,9 +108,8 @@ Roles de Usuarios
                                 <thead>
                                 <tr>
                                     <th width="10%">ID</th>
-                                    <th width="15%">Nombre</th>
-                                    <th width="15%">Slug</th>
-                                    <th width="40%">Descripci&oacute;n</th>
+                                    <th width="30%">Usario</th>
+                                    <th width="40%">Nombre</th>
                                     <th width="20%">Opciones</th>
                                 </tr>
                                 </thead>
@@ -141,7 +138,7 @@ Roles de Usuarios
     </div>
 
     <!-- formulario para eliminar item -->
-    {!! Form::open(['route' => ['roles.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
+    {!! Form::open(['route' => ['users.destroy',':ID'], 'method' => 'DELETE', 'id' => 'frmDelete']) !!}
 
     {!! Form::close() !!}
 
@@ -150,7 +147,7 @@ Roles de Usuarios
 
     <div id="divRenderFormulario">
        
-        @include('roles.partials.rolesModal')
+        @include('users.partials.usersModal')
 
     </div>
 @endsection

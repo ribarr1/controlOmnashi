@@ -2,7 +2,7 @@
 
   	<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
   		
-  	<h4><i class="icon fa fa-ban" id="iconoMensaje"></i><span id="tipo"></span></h4>
+  	<h4><i class="icon fa fa-ban" id="iconoMensajeModal"></i><span id="tipoModal"></span></h4>
     
-    <span id="mensaje"></span> 
+    <span id="mensajeModal"></span> 
 </div>

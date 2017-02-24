@@ -56,7 +56,11 @@ jQuery.fn.eliminar = function() {
     }
 };
 
-//Funcion para agregar o modificar mediante ajax
+/**
+ * Funcion para agregar o modificar mediante ajax
+ *
+ */
+
 $.grabarRegistro = function(formulario,token){
 
     var form = $('#'+formulario);
@@ -74,7 +78,6 @@ $.grabarRegistro = function(formulario,token){
         },
 
     }).done(function(res) {
-
 
         imprimirMensaje(res.tipo,res.message,res.tabla,res.divDestino);
 
@@ -104,17 +107,30 @@ $.grabarRegistro = function(formulario,token){
 //Funcion imprimir mensajes
 var imprimirMensaje = function(tipo,mensaje,tabla=true,divDestino='divMensajeModal'){
 
-    var icono = '';
-    var alerta = '';
+    var icono      = '';
+    var alerta     = '';
+    var divMensaje = '';
+    var divTipo    = '';
+    var divIcono   = '';
 
    //Recargo los datos en datatable para que muestre los cambios recientes
     if(tabla)
         $('#tabla').DataTable().ajax.reload();
         
     
-    if(divDestino!='divMensajeModal')
+    if(divDestino!='divMensajeModal'){
         //Desvanecemos la ventana modal
         $('#myModal').modal('hide');
+        divMensaje = 'mensaje';
+        divTipo    = 'tipo';
+        divIcono   = 'iconoMensaje';
+    } else {
+
+        divMensaje = 'mensajeModal';
+        divTipo    = 'tipoModal';
+        divIcono   = 'iconoMensajeModal';
+    }
+        
 
     if(tipo=='Exito'){
         
@@ -129,13 +145,13 @@ var imprimirMensaje = function(tipo,mensaje,tabla=true,divDestino='divMensajeMod
     }
 
   
-    $('#mensaje').html(' ');
+    $('#'+divMensaje).html(' ');
 
     $('#'+divDestino).removeClass('hidden').addClass(alerta).fadeIn();
 
-    $('#tipo').html(tipo);
+    $('#'+tipoModal).html(tipo);
 
-    $('#iconoMensaje').removeClass().addClass(icono);
+    $('#'+divIcono).removeClass().addClass(icono);
 
-    $("#mensaje").html(mensaje);
+    $("#"+divMensaje).html(mensaje);
 }

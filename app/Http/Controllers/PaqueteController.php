@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+	
 use Illuminate\Http\Request;
 
-//Modelos
-use Bican\Roles\Models\Role;
-//Fin modelos
+use App\Paquete;
+
 
 use App\Http\Requests;
 
@@ -14,86 +13,72 @@ use Yajra\Datatables\Facades\Datatables;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-
-class RolesController extends Controller
+class PaqueteController extends Controller
 {
-
-
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
-        $tituloPagina = 'Listado de Roles de Usuarios';
+        //Hago la consulta general
+        
+       //return view('paquetes.indexPaquetes');
+       $tituloPagina = 'Listado de Paquetes';
 
-        return view('roles.indexRoles',compact('tituloPagina'));
+        return view('paquetes.indexPaquetes',compact('tituloPagina'));
+        
     }
 
-    /**
-     * Muesta el listado general de roles
+     /**
+     * Muesta el listado general de mascotas
      *
      * @return \Illuminate\Http\Response
      */
     public function listado(Request $request)
     {
-        
-        $tabla = new Role();
-
+        $tabla = new Paquete();
         if($request->ajax())
-        {
+        {   
             
-            $roles = $tabla->all();
-     
-            return Datatables::of($roles)
-            ->setRowId('id')
-            ->addColumn('id',function($role){
-                return $role->id;
-            })
-            ->addColumn('name',function($role){
-                return $role->name;
-            })
-            ->addColumn('slug',function($role){
-                return $role->slug;
-            })
-            ->addColumn('description',function($role){
-                return $role->description;
-            })
-            ->addColumn('action', function ($role) {
-                
-                $ruta = route('roles.edit',$role->id);
+             $paquetes = $tabla->all();  
 
-                $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$role->id);
-                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete"   title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$role->id);
+            //$paquetes = $tabla->listadoGeneral();
+          
+            return Datatables::of($paquetes)
+            ->setRowId('id')
+            ->addColumn('id',function($paquete){
+                return $paquete->id;
+            })
+            ->addColumn('nombre',function($paquete){
+                return $paquete->nombre;
+            })
+            
+            ->addColumn('precio',function($paquete){
+                return $paquete->precio;
+            })
+            ->addColumn('action', function ($paquete) {            
+                $ruta = route('paquetes.edit',$paquete->id);
+
+               $strHtml = sprintf('<a href="#" class="btn btn-warning btn-sm btn-edit" title="Editar" data-id="%d"><i class="fa fa-pencil"></i></a> ',$paquete->id);
+                $strHtml .= sprintf('<button type="button" class="btn btn-danger btn-sm btn-delete"   title="Eliminar" data-id="%d" onclick="$(this).eliminar()"><i class="fa fa-trash"></i></button>',$paquete->id);
 
                 return $strHtml;
             })
             ->make(true);
         }
 
-        return view('roles.indexRoles');
+        return view('paquetes.indexPaquetes');
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
-        //
         if($request->ajax())
         {
 
-            $view = view('roles.partials.rolesModal');
+            $view = view('paquetes.partials.paquetesModal');
             
             $sections = $view->renderSections();
                
@@ -101,45 +86,37 @@ class RolesController extends Controller
             
         } else {
 
-            return view('roles');
+            return view('indexPaquetes');
 
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+	public function store(Request $request)
+	{
+
         $this->validate($request,[
 
-            'name'         =>  'required',
-            'slug'         =>  'required',
-            'description'  =>  'required',
-            
+            'nombre'         =>  'required',
+            'precio'         =>  'required',
+                        
             ],
 
             [
-            'name.required'        => "El campo nombre es requerido",
-            'slug.required'        => "El campo slug es requerido",
-            'description.required' => "El campo descripcion es requerido",
-
+            'nombre.required'        => "El campo nombre es requerido",
+            'precio.required'        => "El campo precio es requerido",
+            
             ]
 
             );
 
-        $role = new Role();
+        $paquete = new Paquete();
 
         if($request->ajax())
         {
 
             $data = $request->all();
 
-            $role->create($data);
+            $paquete->create($data);
 
             $result = [
                 'tipo'          =>'Exito',
@@ -152,44 +129,31 @@ class RolesController extends Controller
             return response()->json($result); 
             
         } else {
-            return view('roles');
+            return view('indexPaquetes');
 
         }
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
+
+	}
     public function show($id)
     {
-        //
+       
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id, Request $request)
-    {
-        //
-
-        $role = Role::find($id);
-
+	
+	public function edit(Request $request, $id)
+	{
+   		$paquete = Paquete::find($id);
 
         if($request->ajax())
         {
 
-            if(!empty($role))
+            if(!empty($paquete))
             {
 
                 $accion = 'Editar';
                 
-                $view = view('roles.partials.rolesModal',compact('accion','role'));
+                $view = view('paquetes.partials.paquetesModal',compact('accion','Paquete'));
             
                 $sections = $view->renderSections();
                
@@ -210,22 +174,16 @@ class RolesController extends Controller
             
         } else {
 
-            return view('roles');
+            return view('paquetes/indexPaquetes');
 
         }
-    }
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+	public function update(Request $request, $id)
     {
         //
-        $role = Role::findOrFail($id);
+        $paquete = Paquete::findOrFail($id);
 
         try{
 
@@ -235,7 +193,7 @@ class RolesController extends Controller
                 $data = $request->all();
 
 
-                if(empty($role))
+                if(empty($paquete))
                 {
                     $result = [
                         'tipo'          => 'Error',
@@ -250,9 +208,9 @@ class RolesController extends Controller
                 } else {
 
                     //Actualizo con el metodo fill
-                    $role->fill($data);
-                    $role->touch();
-                    $role->save(); 
+                    $paquete->fill($data);
+                    $paquete->touch();
+                    $paquete->save(); 
 
                     $result = [
                         'tipo'          => 'Exito',
@@ -268,7 +226,7 @@ class RolesController extends Controller
 
             } else {
 
-                return view('roles.index');
+                return view('paquetes/indexPaquetes');
 
             }
 
@@ -278,26 +236,20 @@ class RolesController extends Controller
             Session::flash('message',$e->errorInfo[1].', no fue posible actualizar');
             Session::flash('error', 'alert-danger');
 
-            return redirect()->to('/roles/');
+            return redirect()->to('/paquete/');
             
 
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id, Request $request)
+public function destroy($id, Request $request)
     {
         //
         if($request->ajax())
         {
             try {
 
-                Role::findOrFail($id)->delete();
+                Paquete::findOrFail($id)->delete();
 
                 $result = [
                         'tipo'          => 'Exito',
@@ -329,4 +281,20 @@ class RolesController extends Controller
         }
     }
 
+	/*public function index(){
+    	$paquetes = Paquete::all(); 
+    	return \View::make('paquetes/indexPaquetes',compact('paquetes'));
+	}/*
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+
+    
+    
+
+		
 }
