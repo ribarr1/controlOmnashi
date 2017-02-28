@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Paquete;
 
+use Bican\Roles\Models\Role;
+use App\User;
+use App\RolUser;
 
 use App\Http\Requests;
 
@@ -77,7 +80,7 @@ class PaqueteController extends Controller
     {
         if($request->ajax())
         {
-
+            
             $view = view('paquetes.partials.paquetesModal');
             
             $sections = $view->renderSections();
@@ -86,7 +89,7 @@ class PaqueteController extends Controller
             
         } else {
 
-            return view('indexPaquetes');
+            return view('paquetes');
 
         }
     }
@@ -126,10 +129,13 @@ class PaqueteController extends Controller
                 'divDestino'    => 'divMensajeModal'                
                 ];
 
+                
+
             return response()->json($result); 
+
             
         } else {
-            return view('indexPaquetes');
+            return view('paquetes');
 
         }
 
@@ -143,17 +149,18 @@ class PaqueteController extends Controller
 	
 	public function edit(Request $request, $id)
 	{
-   		$paquete = Paquete::find($id);
+   		
+        $paquete = Paquete::find($id);
 
         if($request->ajax())
         {
 
             if(!empty($paquete))
             {
-
+                
                 $accion = 'Editar';
                 
-                $view = view('paquetes.partials.paquetesModal',compact('accion','Paquete'));
+                $view = view('paquetes.partials.paquetesModal',compact('accion','paquete'));
             
                 $sections = $view->renderSections();
                
@@ -174,7 +181,7 @@ class PaqueteController extends Controller
             
         } else {
 
-            return view('paquetes/indexPaquetes');
+            return view('paquetes');
 
         }
 	}
@@ -226,7 +233,7 @@ class PaqueteController extends Controller
 
             } else {
 
-                return view('paquetes/indexPaquetes');
+                return view('paquetes');
 
             }
 

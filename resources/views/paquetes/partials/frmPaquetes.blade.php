@@ -1,5 +1,5 @@
 @if(isset($accion))
-die($accion);
+
   {!! Form::model($paquete, ['route' => ['paquetes.update', $paquete->id],'method'=>'put','id'=>'frm'])!!}
 @else
   {!! Form::open(['route'=>'paquetes.store','id'=>'frm'])!!}
@@ -7,7 +7,7 @@ die($accion);
   <div class="form-group">
 
     
-    <label for="exampleInputEmail1">Nombrea</label>
+    <label for="nombre">Nombre</label>
 
     {!! Form::hidden('id',null, ['id'=>'id']) !!}
 
@@ -18,7 +18,7 @@ die($accion);
   </div>
   
   <div class="form-group">
-    <label for="exampleInputPassword1">Precio</label>
+    <label for="precio">Precio</label>
     {!! Form::text('precio',null, ['class'=>"form-control",'placeholder'=>'precio','id'=>'precio']) !!}
     <span class="help-block slug hidden text-red"></span>
   </div>

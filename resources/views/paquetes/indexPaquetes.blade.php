@@ -64,7 +64,7 @@
             //Funcion para guardar el registro
             //Funcion para crear o modificar color
             $('#divRenderFormulario').on('click','a.btn-guardar',function(){
-                
+                $accion = 'Editar';
                 var token = $("input[name=_token]").val();
                 var modal = true; 
                
